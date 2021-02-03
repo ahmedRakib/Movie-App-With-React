@@ -1,12 +1,25 @@
 import React from 'react';
+import _ from 'lodash' 
+//while importing lodash it is common convention to use "_". 
+//coz it is an updated version of a popular js library called underscore.
 
 const Pagination = (props) => {
+
+    const {itemsCount, pageSize } = props;
+    const pageCount = Math.ceil(itemsCount / pageSize);
+    if(pageCount == 1) return null;
+    const pages = _.range(1, pageCount+1); 
+    // we have to add +1 here coz this method will not add the N'th number here. 
+    //so if the pageCount is 4 it will create an array from 1 to 3
+
+    console.log(pages.length)
+
     return ( 
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <nav>
+            <ul className="pagination">
+                {pages.map (page => 
+                     <li key={page} className="page-item"><a className="page-link" >{page}</a></li>
+                     )}
             </ul>
         </nav>
      );
