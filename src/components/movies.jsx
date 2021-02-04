@@ -5,7 +5,9 @@ import Pagination from './common/pagination';
 
 class Movies extends Component {
     state = { 
-        movies : getMovies()
+        movies : getMovies(),
+        pageSize : 4,
+        currentPage : 1
      };
 
      handleDelete(movie){
@@ -30,6 +32,7 @@ class Movies extends Component {
 
      handlePageChange = page =>{
          console.log(page);
+         this.setState ( {currentPage : page} )
      }
      
 
@@ -65,7 +68,7 @@ class Movies extends Component {
                         )}
                     </tbody>
                     </table>
-                    <Pagination itemsCount = {this.state.movies.length} pageSize = {10} onPageChange = {()=> this.handlePageChange()}/>
+                    <Pagination itemsCount = {this.state.movies.length} pageSize = {this.state.pageSize} currentPage = {this.state.currentPage} onPageChange = {this.handlePageChange}/>
             </React.Fragment>
          );
     }
