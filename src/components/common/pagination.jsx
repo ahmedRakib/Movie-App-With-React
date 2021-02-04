@@ -1,5 +1,6 @@
 import React from 'react';
-import _ from 'lodash' 
+import _ from 'lodash';
+import PropTypes from 'prop-types'
 //while importing lodash it is common convention to use "_". 
 //coz it is an updated version of a popular js library called underscore.
 
@@ -26,5 +27,12 @@ const Pagination = (props) => {
         </nav>
      );
 }
- 
+
+Pagination.propTypes = {
+    itemsCount : PropTypes.number.isRequired,
+    pageSize : PropTypes.number.isRequired, 
+    currentPage : PropTypes.number.isRequired,
+    onPageChange : PropTypes.func.isRequired
+}
+
 export default Pagination;
