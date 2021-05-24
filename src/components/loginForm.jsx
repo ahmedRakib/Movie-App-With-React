@@ -27,7 +27,7 @@ class LoginForm extends Component {
 
         const errors = this.validate();
         console.log(errors);
-        this.setState( { errors } );
+        this.setState( { errors : errors || {} } ); //if there is no error then assigning an empty object
         if(errors) return;
 
         //call the server
@@ -53,6 +53,7 @@ class LoginForm extends Component {
                         name = "username" 
                         onChange = {this.handleChange}
                         type = "text"
+                        error = {this.state.errors.username}
                     />
                     <Input 
                         value={this.state.password} 
@@ -60,6 +61,7 @@ class LoginForm extends Component {
                         name = "password" 
                         onChange = {this.handleChange}
                         type = "password"
+                        error = {this.state.errors.password}
                     />
                     <button className="btn btn-primary">Login</button>
                  </form>
