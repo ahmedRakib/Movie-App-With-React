@@ -22,6 +22,21 @@ class LoginForm extends Component {
 
     }
 
+    //
+    validateProperty(e){
+        // if(e.currentTarget.name === "username"){
+        //     if(e.currentTarget.value.trim() === "") return "Username is required";
+        // }
+        // if(e.currentTarget.name === "password"){
+        //     if(e.currentTarget.value.trim() === "") return "Password is required";
+        // }
+
+        if(e.currentTarget.value.trim() === ""){
+            if(e.currentTarget.name === "username") return "Username is required";
+            else return "Password is required";
+        }
+    }
+
     handleSubmit = e => {
         e.preventDefault();
 
@@ -36,10 +51,16 @@ class LoginForm extends Component {
 
     handleChange = e =>{
         const account = {...this.state.account}
+        const errors = {...this.state.errors}
+
+        //validation
+        const errorMessage = this.validateProperty(e);
+        if(errorMessage) errors[e.currentTarget.name] = errorMessage;
+        else delete errors[e.currentTarget.name];
 
         account[e.currentTarget.name] = e.currentTarget.value;
 
-        this.setState( {account} );
+        this.setState( {account, errors} );
     }
 
     render() { 
