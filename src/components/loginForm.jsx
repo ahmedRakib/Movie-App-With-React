@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Joi, { schema } from 'joi-browser';
 import Input from './common/input';
 
 class LoginForm extends Component {
@@ -8,18 +9,33 @@ class LoginForm extends Component {
         errors : {}
     }
 
+    schema = {
+        username : Joi.string().required().label('Username'),
+        password : Joi.string().required().label('Password')
+    }
+
     validate () {
-        //return  { username: "User Name is requried" };
+        const result = Joi.validate(this.state.account, this.schema, {abortEarly: false});
+
+        if(!result.error)  return null;
+
         const errors = {};
-        const {account} = this.state;
+        for(let item of result.error.details){
+            //console.log("Hello" + item.path[0])
+            errors[item.path[0]] =  item.message;
+        }
+        return errors;
 
-        if(account.username.trim() === '')
-        errors.username = "UserName is required";
-        if(account.password.trim() === '')
-        errors.password = "Password is required";
+        // previous code without joi 
+        // const errors = {};
+        // const {account} = this.state;
 
-        return Object.keys(errors).length === 0 ? null : errors;
+        // if(account.username.trim() === '')
+        // errors.username = "UserName is required";
+        // if(account.password.trim() === '')
+        // errors.password = "Password is required";
 
+        // return Object.keys(errors).length === 0 ? null : errors;
     }
 
     //
@@ -31,10 +47,23 @@ class LoginForm extends Component {
         //     if(e.currentTarget.value.trim() === "") return "Password is required";
         // }
 
-        if(e.currentTarget.value.trim() === ""){
-            if(e.currentTarget.name === "username") return "Username is required";
-            else return "Password is required";
+        // if(e.currentTarget.value.trim() === ""){
+        //     if(e.currentTarget.name === "username") return "Username is required";
+        //     else return "Password is required";
+        // }
+
+        const obj = {
+            [e.currentTarget.name] : e.currentTarget.value
         }
+
+        const schema = {
+            [e.currentTarget.name] : this.schema[e.currentTarget.name]
+        }
+
+        const result = Joi.validate(obj, schema );
+
+        return result.error ? result.error.details[0].message  : null;
+
     }
 
     handleSubmit = e => {
