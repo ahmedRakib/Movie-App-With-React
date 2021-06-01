@@ -113,7 +113,8 @@ class LoginForm extends Component {
                         type = "password"
                         error = {this.state.errors.password}
                     />
-                    <button className="btn btn-primary">Login</button>
+                    {/* if validate method returns null then its falsy(false) otherwise truthy(true) */}
+                    <button disabled = {this.validate()} className="btn btn-primary">Login</button>
                  </form>
             </div>
        
