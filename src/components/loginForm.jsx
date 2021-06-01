@@ -67,7 +67,7 @@ class LoginForm extends Component {
     }
 
     handleSubmit = e => {
-        e.preventDefault();
+        e.preventDefault(); // preventing auto post to server
 
         const errors = this.validate();
         console.log(errors);
