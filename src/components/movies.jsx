@@ -6,11 +6,13 @@ import { paginate } from '../utils/paginate';
 import Like from './common/like';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
+import SearchBox from './common/searchBox';
 
 class Movies extends Component {
   state = {
     movies: getMovies(),
     genres: getGenres(),
+    searchQuery: "",
     selectedGenre : null,
     pageSize: 4,
     currentPage: 1,
@@ -41,19 +43,32 @@ class Movies extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleSearch = (searchQuery) =>{
+    this.setState({searchQuery, selectedGenre : null, currentPage : 1})
+  }
+
   handleGenreSelect = (genre) => {
     console.log(genre);
     if(genre)
-    this.setState({selectedGenre : genre, currentPage : 1})
+    this.setState({selectedGenre : genre, searchQuery : "", currentPage : 1})
     else 
-    this.setState({selectedGenre : null, currentPage : 1})
+    this.setState({selectedGenre : null, searchQuery : "", currentPage : 1})
 
   };
 
   render() {
-    const { currentPage, pageSize, selectedGenre, movies: allMovies } = this.state; //object destructuring (state objects)
+    const { currentPage, pageSize, selectedGenre, searchQuery, movies: allMovies } = this.state; //object destructuring (state objects)
 
-    const filteredMovies = selectedGenre
+
+    let filteredMovies = allMovies;
+
+    if(searchQuery)
+    filteredMovies = allMovies.filter( m =>
+      m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+    );
+
+    else if(selectedGenre && selectedGenre._id)
+    filteredMovies = selectedGenre
       ? allMovies.filter(movie => movie.genre._id == selectedGenre._id)
       : allMovies;
 
@@ -75,6 +90,8 @@ class Movies extends Component {
           <Link to="/movies/new" className="btn btn-primary">New Movie</Link>
           <br></br>
           <p>Showing {filteredMovies.length} in the database</p>
+          
+          <SearchBox value = {searchQuery} onChange = {this.handleSearch}/>
 
           {this.movies}
           <table className="table">
