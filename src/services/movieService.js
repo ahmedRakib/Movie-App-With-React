@@ -2,17 +2,20 @@ import http from './httpService'
 
 const apiEndpoint = "http://localhost:3900/api/movies";
 
+function movieUrl(movieId){
+  return `${apiEndpoint}/${movieId}`;
+}
+
 export function getMovies() {
   return http.get(apiEndpoint);
 }
 
 export function getMovie(id) {
-  return http.get(apiEndpoint + "/" + id)
+  return http.get(movieUrl(id))
 }
 
 export function deleteMovie(movieId){
-  console.log(movieId);
-  return http.delete(apiEndpoint + "/" + movieId)
+  return http.delete(movieUrl(movieId))
 }
 
 export async function saveMovie(movie) {
@@ -20,10 +23,10 @@ export async function saveMovie(movie) {
   if(movie._id){
     const movieBody = { ...movie };
     delete movieBody._id
-    const { data } = await http.put(apiEndpoint + "/" + movie._id, movieBody);
+    return http.put(movieUrl(movie._id), movieBody);
   }
  else{
-  const { data } = await http.post(apiEndpoint, movie);
+  return http.post(apiEndpoint, movie);
  }
   
   // let movieInDb = movies.find(m => m._id === movie._id) || {};
