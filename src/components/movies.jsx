@@ -9,8 +9,7 @@ import Like from './common/like';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
 import SearchBox from './common/searchBox';
-
-
+import {toast} from 'react-toastify'
 
 class Movies extends Component {
  
@@ -43,7 +42,7 @@ class Movies extends Component {
     catch (ex) {
       if(ex.response && ex.response.status === 404 )
       {
-        alert("The Movie does not exists");
+        toast.error("The Movie does not exists");
       }
 
       this.setState({ movies : originalMovies });
