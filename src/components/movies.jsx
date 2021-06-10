@@ -1,29 +1,52 @@
 import React,  { Component }  from 'react';
 import {Link} from 'react-router-dom'
-import { getGenres } from '../services/fakeGenreService';
-import { deleteMovie, getMovies } from '../services/fakeMovieService'
+// import { getGenres } from '../services/fakeGenreService';
+import { getGenres } from '../services/genreService';
+import { deleteMovie, getMovies } from '../services/movieService';
+// import { deleteMovie, getMovie } from '../services/fakeMovieService'
 import { paginate } from '../utils/paginate';
 import Like from './common/like';
 import ListGroup from './common/listGroup';
 import Pagination from './common/pagination';
 import SearchBox from './common/searchBox';
+import {toast} from 'react-toastify'
 
 class Movies extends Component {
+ 
   state = {
-    movies: getMovies(),
-    genres: getGenres(),
+    movies: [],
+    genres: [],
     searchQuery: "",
     selectedGenre : null,
     pageSize: 4,
     currentPage: 1,
   };
 
-  handleDelete(movie) {
-    deleteMovie(movie._id);
+  async componentDidMount(){
+    const { data } = await getGenres();
+    const genres = [{_id: "", name : "All Genres"}, ...data]
 
-    this.setState({ movies: getMovies() });
-    console.log("delete button clicked", movie._id);
-    console.log(this);
+    const { data : movies } = await getMovies();
+
+    this.setState( {genres , movies} );
+  }
+
+  async handleDelete(movie) {
+    const originalMovies = this.state.movies;
+    const movies = this.state.movies.filter( m => m._id !== movie._id);
+    this.setState({movies});
+
+    try{
+      await deleteMovie(movie._id);
+    }
+    catch (ex) {
+      if(ex.response && ex.response.status === 404 )
+      {
+        toast.error("The Movie does not exists");
+      }
+
+      this.setState({ movies : originalMovies });
+    }
   }
 
   handleLikeUnlike(movie) {
@@ -62,11 +85,11 @@ class Movies extends Component {
 
     let filteredMovies = allMovies;
 
-    if(searchQuery)
+    if(searchQuery){
     filteredMovies = allMovies.filter( m =>
       m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
     );
-
+    }
     else if(selectedGenre && selectedGenre._id)
     filteredMovies = selectedGenre
       ? allMovies.filter(movie => movie.genre._id == selectedGenre._id)

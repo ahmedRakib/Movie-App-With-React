@@ -1,20 +1,8 @@
 import React, { Component } from 'react';
 import Form from './common/form';
 import Joi from 'joi-browser';
-import { getGenres } from '../services/fakeGenreService';
-import { getMovie, saveMovie } from '../services/fakeMovieService'
-
-
-// const MovieForm = ({match, history}) => {
-//     console.log(match)
-//     return ( 
-//         <div>
-//             <h1>Movie - {match.params.id}</h1> 
-//             <button className="btn btn-primary"onClick={ () => {history.push("/movies")}}>Save</button>
-//         </div>
-    
-//     );
-// }
+import { getGenres } from '../services/genreService';
+import { getMovie, saveMovie } from '../services/movieService'
 
 class MovieForm extends Form {
     state = { 
@@ -22,8 +10,7 @@ class MovieForm extends Form {
             title:"",
             genreId: "",
             numberInStock:"",
-            dailyRentalRate:"",
-
+            dailyRentalRate:""
         },
         genres: [],
         errors : {}
@@ -37,41 +24,50 @@ class MovieForm extends Form {
          dailyRentalRate : Joi.number().required().max(10).label("Rate")
      }
 
-     componentDidMount(){
-         const genres = getGenres();
-         this.setState( {genres} );
+     async componentDidMount(){
+        this.populateGenre();
+        this.populateMovie();       
+    }
 
-         console.log("Genres" + genres)
-         const movieId  = this.props.match.params.id;
+     async populateGenre(){
+        const { data :genres } = await getGenres();
+        this.setState( {genres} );
+     };
 
-         if(movieId === "new") return;
+     async populateMovie() {
+        const movieId  = this.props.match.params.id;
+        if(movieId === "new") 
+            return;
 
-         const movie = getMovie(movieId);
-         if(!movie) return this.props.history.replace("/not-found");
-
-         this.setState ({ data : this.mapToViewModel(movie) });
+        try {
+        const { data : movie } = await getMovie(movieId);
+        this.setState ({ data : this.mapToViewModel(movie) });
+        }
+        catch (ex) {
+            if(ex.response && ex.response.status === 404)
+            this.props.history.replace("/not-found");
+        }
      }
 
      mapToViewModel(movie){
-         return {
-             _id: movie._id,
-             title : movie.title,
-             genreId : movie.genre._id,
-             numberInStock : movie.numberInStock,
-             dailyRentalRate : movie.dailyRentalRate
-         }
-     }
-
-     doSubmit (){
-         saveMovie(this.state.data);
-
+        return {
+            _id: movie._id,
+            title : movie.title,
+            genreId : movie.genre._id,
+            numberInStock : movie.numberInStock,
+            dailyRentalRate : movie.dailyRentalRate
+        }
+    }
+      
+    doSubmit = async () => {
+         await saveMovie(this.state.data);
          this.props.history.push("/movies");
      }
 
     render() { 
         return ( 
             <div>
-                <h1>New Movie</h1>
+                {this.props.match.params.id === "new" ? (<h1>New Movie</h1>) : (<h1>Edit Movie</h1>) }
                 <form onSubmit={this.handleSubmit}>
                     {this.renderInput("title", "Title")}
                     {this.renderSelect("genreId", "Genre", this.state.genres)}
