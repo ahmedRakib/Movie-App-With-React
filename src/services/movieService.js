@@ -15,7 +15,7 @@ export function getMovie(id) {
 }
 
 export function deleteMovie(movieId){
-  return http.delete(movieUrl("555555"))
+  return http.delete(movieUrl(movieId))
 }
 
 export async function saveMovie(movie) {
