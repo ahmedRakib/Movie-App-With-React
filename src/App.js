@@ -6,13 +6,15 @@ import NavBar from './components/common/navBar';
 import { ToastContainer } from 'react-toastify'
 import Customers from './components/customers';
 import MovieForm from './components/movieForm';
-import LoginForm from './components/loginForm'
-import Movies from './components/movies'
+import LoginForm from './components/loginForm';
+import Logout from './components/logout';
+import Movies from './components/movies';
 import NotFound from './components/notFound';
 import Rentals from './components/rentals';
 import RegisterForm from './components/registerForm';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
+
 class  App extends Component {
   state = {};
 
@@ -35,6 +37,7 @@ render(){
     <main className="container">
       <Switch>
           <Route path="/login" component={LoginForm}/>
+          <Route path="/logout" component={Logout}/>
           <Route path="/register" component={RegisterForm}/>
           <Route path="/movies/:id" component={MovieForm}/>
           <Route path="/movies" component={Movies}/>
