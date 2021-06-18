@@ -20,7 +20,8 @@ class RegisterForm extends Form {
             const response = await register(this.state.data);
             if(response.headers){
                 localStorage.setItem("token", response.headers["x-auth-token"]);
-                this.props.history.push('/');
+                //this.props.history.push('/');
+                window.location = '/';
             }
          }
          catch (ex){

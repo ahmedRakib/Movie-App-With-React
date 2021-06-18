@@ -1,6 +1,7 @@
 
-import React from 'react';
+import React, { Component } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router';
+import jwtDecode from 'jwt-decode'
 import NavBar from './components/common/navBar';
 import { ToastContainer } from 'react-toastify'
 import Customers from './components/customers';
@@ -12,11 +13,24 @@ import Rentals from './components/rentals';
 import RegisterForm from './components/registerForm';
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css'
-function App() {
+class  App extends Component {
+  state = {};
+
+  componentDidMount() {
+    try {
+      const token = localStorage.getItem('token');
+      const user = jwtDecode(token)
+  
+      this.setState ({user});
+      
+    } catch (ex) {}  
+  }
+
+render(){
   return (
     <React.Fragment>
     <ToastContainer />
-    <NavBar />
+    <NavBar user = { this.state.user } />
 
     <main className="container">
       <Switch>
@@ -35,5 +49,5 @@ function App() {
     </React.Fragment>
   );
 }
-
+}
 export default App;
