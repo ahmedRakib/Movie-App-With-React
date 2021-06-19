@@ -9,6 +9,10 @@ export function getCurrentUser(){
     return user;
 }
 
+export function getJwt () {
+    return localStorage.getItem('token');
+}
+
 export async function login(loginModel){
     const { data : jwt } = await http.post(apiEndpoint, { email : loginModel.username, password : loginModel.password });
     localStorage.setItem("token", jwt);
@@ -25,6 +29,7 @@ export function logout(){
 
 export default {
     getCurrentUser,
+    getJwt,
     login,
     loginWithJwt,
     logout
