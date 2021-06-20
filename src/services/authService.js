@@ -3,6 +3,8 @@ import jwtDecode from 'jwt-decode'
 
 const apiEndpoint = "http://localhost:3900/api/auth";
 
+http.setJwt(getJwt()); //setting jwt in request header for every http request passed to server
+
 export function getCurrentUser(){
     const token = localStorage.getItem('token');
     const user = jwtDecode(token)
@@ -25,7 +27,6 @@ export function loginWithJwt(jwt){
 export function logout(){
     localStorage.removeItem('token');
 }
-
 
 export default {
     getCurrentUser,
