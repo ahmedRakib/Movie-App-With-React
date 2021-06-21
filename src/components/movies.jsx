@@ -110,7 +110,8 @@ class Movies extends Component {
           />
         </div>
         <div className="movieTable">
-          <Link to="/movies/new" className="btn btn-primary">New Movie</Link>
+          {/* if the user is logged in then he can show the create button */}
+          {this.props.user && <Link to="/movies/new" className="btn btn-primary">New Movie</Link>}
           <br></br>
           <p>Showing {filteredMovies.length} in the database</p>
           

@@ -7,6 +7,9 @@ http.setJwt(getJwt()); //setting jwt in request header for every http request pa
 
 export function getCurrentUser(){
     const token = localStorage.getItem('token');
+    if(!token)
+    return null;
+    
     const user = jwtDecode(token)
     return user;
 }
