@@ -13,8 +13,6 @@ const Pagination = (props) => {
     // we have to add +1 here coz this method will not add the N'th number here. 
     //so if the pageCount is 4 it will create an array from 1 to 3
 
-    console.log(pages.length)
-
     return ( 
         <nav>
             <ul className="pagination">

@@ -23,7 +23,6 @@ class LoginForm extends Form {
         try {
             await authService.login(this.state.data);
             //this.props.history.push('/');
-            console.log('From login page', this.props)
             const { state } = this.props.location; //getting the requested url by the user to redirect to that url after login
             window.location = state ? state.from.pathname : '/';
         } catch (ex) {

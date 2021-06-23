@@ -62,7 +62,6 @@ class Movies extends Component {
   }
 
   handlePageChange = (page) => {
-    console.log(page);
     this.setState({ currentPage: page });
   };
 
@@ -71,7 +70,6 @@ class Movies extends Component {
   }
 
   handleGenreSelect = (genre) => {
-    console.log(genre);
     if(genre)
     this.setState({selectedGenre : genre, searchQuery : "", currentPage : 1})
     else 

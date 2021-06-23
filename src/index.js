@@ -9,6 +9,8 @@ import 'font-awesome/css/font-awesome.css';
 import Movies from './components/movies'
 import { BrowserRouter } from 'react-router-dom';
 
+console.log(process.env.REACT_APP_NAME)
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
